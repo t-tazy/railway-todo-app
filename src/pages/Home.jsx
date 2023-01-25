@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { Header } from '../components/Header';
 import { url } from '../const';
-import './home.css';
+import './home.scss';
 
 export const Home = () => {
   const [isDoneDisplay, setIsDoneDisplay] = useState('todo'); // todo->未完了 done->完了
@@ -131,9 +131,7 @@ const Tasks = (props) => {
     return (
       <ul>
         {tasks
-          .filter((task) => {
-            return task.done === true;
-          })
+          .filter((task) => task.done === true)
           .map((task, key) => (
             <li key={key} className="task-item">
               <Link
@@ -153,9 +151,7 @@ const Tasks = (props) => {
   return (
     <ul>
       {tasks
-        .filter((task) => {
-          return task.done === false;
-        })
+        .filter((task) => task.done === false)
         .map((task, key) => (
           <li key={key} className="task-item">
             <Link

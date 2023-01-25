@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { Navigate, Link, useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
-import './signin.css';
+import './signin.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { signIn } from '../authSlice';
 import { url } from '../const';
@@ -20,7 +20,7 @@ export const SignIn = () => {
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const onSignIn = () => {
     axios
-      .post(`${url}/signin`, { email: email, password: password })
+      .post(`${url}/signin`, { email, password })
       .then((res) => {
         setCookie('token', res.data.token);
         dispatch(signIn());

@@ -6,7 +6,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { signIn } from '../authSlice';
 import { Header } from '../components/Header';
 import { url } from '../const';
-import './signUp.css';
+import './signUp.scss';
 
 export const SignUp = () => {
   const navigate = useNavigate();
@@ -22,15 +22,15 @@ export const SignUp = () => {
   const handlePasswordChange = (e) => setPassword(e.target.value);
   const onSignUp = () => {
     const data = {
-      email: email,
-      name: name,
-      password: password,
+      email,
+      name,
+      password,
     };
 
     axios
       .post(`${url}/users`, data)
       .then((res) => {
-        const token = res.data.token;
+        const {token} = res.data;
         dispatch(signIn());
         setCookie('token', token);
         navigate('/');

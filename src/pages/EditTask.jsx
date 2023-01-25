@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Header } from '../components/Header';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import { url } from '../const';
 import { useNavigate, useParams } from 'react-router-dom';
-import './editTask.css';
+import { url } from '../const';
+import { Header } from '../components/Header';
+import './editTask.scss';
 
 export const EditTask = () => {
   const navigate = useNavigate();
@@ -20,8 +20,8 @@ export const EditTask = () => {
   const onUpdateTask = () => {
     console.log(isDone);
     const data = {
-      title: title,
-      detail: detail,
+      title,
+      detail,
       done: isDone,
     };
 

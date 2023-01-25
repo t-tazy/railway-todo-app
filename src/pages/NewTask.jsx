@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { url } from '../const';
 import { Header } from '../components/Header';
-import './newTask.css';
-import { useNavigate } from 'react-router-dom';
+import './newTask.scss';
 
 export const NewTask = () => {
   const [selectListId, setSelectListId] = useState();
@@ -19,8 +19,8 @@ export const NewTask = () => {
   const handleSelectList = (id) => setSelectListId(id);
   const onCreateTask = () => {
     const data = {
-      title: title,
-      detail: detail,
+      title,
+      detail,
       done: false,
     };
 

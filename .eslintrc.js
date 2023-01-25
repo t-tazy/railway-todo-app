@@ -38,5 +38,15 @@ module.exports = {
       ],
       // reactモジュールをReactとしてimportすることを強制しない
       'react/react-in-jsx-scope': 'off',
+      // exportにおいてdefault exportがあるかどうか確認しない
+      'import/prefer-default-export': 'off',
+      // 関数コンポーネントの定義方法について, アロー関数を用いる
+      'react/function-component-definition': [
+        2,
+        {
+          namedComponents: 'arrow-function',
+          unnamedComponents: 'arrow-function',
+        },
+      ],
     }
 }

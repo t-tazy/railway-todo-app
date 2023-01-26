@@ -30,7 +30,7 @@ export const SignUp = () => {
     axios
       .post(`${url}/users`, data)
       .then((res) => {
-        const {token} = res.data;
+        const { token } = res.data;
         dispatch(signIn());
         setCookie('token', token);
         navigate('/');

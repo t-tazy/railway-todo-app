@@ -16,6 +16,21 @@
       margin-bottom: 25px;
     }
 
+    .edit-task-limit {
+      width: 300px;
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: space-between;
+
+      .edit-task-due-date {
+        width: 40%;
+      }
+
+      .edit-task-due-time {
+        width: 40%;
+      }
+    }
+
     .delete-task-button {
       color: #ff3333;
       border: solid 1px #ff3333;

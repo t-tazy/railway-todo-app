@@ -1,8 +1,10 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { url } from '../const';
+import { convertLocal } from '../day';
 import { Header } from '../components/Header';
 import './newTask.scss';
 
@@ -11,17 +13,20 @@ export const NewTask = () => {
   const [lists, setLists] = useState([]);
   const [title, setTitle] = useState('');
   const [detail, setDetail] = useState('');
+  const [limit, setLimit] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [cookies] = useCookies();
   const navigate = useNavigate();
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDetailChange = (e) => setDetail(e.target.value);
+  const handleLimitChange = (e) => setLimit(e.target.value);
   const handleSelectList = (id) => setSelectListId(id);
   const onCreateTask = () => {
     const data = {
       title,
       detail,
       done: false,
+      limit: limit ? new Date(limit).toISOString() : null, // ISO8601フォーマット
     };
 
     axios
@@ -52,6 +57,7 @@ export const NewTask = () => {
       .catch((err) => {
         setErrorMessage(`リストの取得に失敗しました。${err}`);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -67,8 +73,8 @@ export const NewTask = () => {
             onChange={(e) => handleSelectList(e.target.value)}
             className="new-task-select-list"
           >
-            {lists.map((list, key) => (
-              <option key={key} className="list-item" value={list.id}>
+            {lists.map((list) => (
+              <option key={list.id} className="list-item" value={list.id}>
                 {list.title}
               </option>
             ))}
@@ -88,6 +94,15 @@ export const NewTask = () => {
             type="text"
             onChange={handleDetailChange}
             className="new-task-detail"
+          />
+          <br />
+          <label>期限</label>
+          <br />
+          <input
+            type="datetime-local"
+            min={convertLocal(new Date().toISOString())}
+            onChange={handleLimitChange}
+            className="new-task-limit"
           />
           <br />
           <button

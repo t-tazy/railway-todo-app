@@ -1,4 +1,4 @@
-// UTC時刻を受け取り、type="datatime-local"のvalue属性のフォーマットに変換して返す
+// UTC時刻を受け取り、type="datetime-local"のvalue属性のフォーマットに変換して返す
 export const convertLocal = (ISO) => {
   // このときのISOはYYYY-MM-DDTHH:MM:SSZ
   // const localTime = new Date(`${ISO.slice(0, -1)}-09:00`); // 現地時刻のDateオブジェクトを作成
@@ -20,7 +20,11 @@ export const convertLocal = (ISO) => {
 export const diffDate = (limit) => {
   const dayUnit = 60 * 60 * 24 * 1000; // ms
   const hourUnit = 60 * 60 * 1000; // ms
-  const diff = Math.abs(new Date(limit) - new Date());
+  // const diff = Math.abs(new Date(limit) - new Date());
+  const diff = new Date(limit) - new Date();
+  if (diff < 0) {
+    return '期限切れ';
+  }
   const diffDays = diff / dayUnit;
   const diffHours = diff / hourUnit;
   if (diffDays < 1) {

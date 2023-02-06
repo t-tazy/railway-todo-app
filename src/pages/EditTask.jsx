@@ -1,8 +1,11 @@
+/* eslint-disable import/namespace */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { useNavigate, useParams } from 'react-router-dom';
 import { url } from '../const';
+import { convertLocal } from '../day';
 import { Header } from '../components/Header';
 import './editTask.scss';
 
@@ -12,10 +15,12 @@ export const EditTask = () => {
   const [cookies] = useCookies();
   const [title, setTitle] = useState('');
   const [detail, setDetail] = useState('');
+  const [limit, setLimit] = useState('');
   const [isDone, setIsDone] = useState();
   const [errorMessage, setErrorMessage] = useState('');
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDetailChange = (e) => setDetail(e.target.value);
+  const handleLimitChange = (e) => setLimit(e.target.value);
   const handleIsDoneChange = (e) => setIsDone(e.target.value === 'done');
   const onUpdateTask = () => {
     console.log(isDone);
@@ -23,6 +28,7 @@ export const EditTask = () => {
       title,
       detail,
       done: isDone,
+      limit: limit ? new Date(limit).toISOString() : null, // ISO8601のファーマット
     };
 
     axios
@@ -66,11 +72,13 @@ export const EditTask = () => {
         const task = res.data;
         setTitle(task.title);
         setDetail(task.detail);
+        setLimit(convertLocal(task.limit));
         setIsDone(task.done);
       })
       .catch((err) => {
         setErrorMessage(`タスク情報の取得に失敗しました。${err}`);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -98,6 +106,15 @@ export const EditTask = () => {
             value={detail}
           />
           <br />
+          <label>期限</label>
+          <br />
+          <input
+            type="datetime-local"
+            min={convertLocal(new Date().toISOString())}
+            onChange={handleLimitChange}
+            className="edit-task-limit"
+            value={limit}
+          />
           <div>
             <input
               type="radio"

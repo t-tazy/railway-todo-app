@@ -1,9 +1,13 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { Header } from '../components/Header';
 import { url } from '../const';
+import { diffDate } from '../day';
 import './home.scss';
 
 export const Home = () => {
@@ -27,8 +31,10 @@ export const Home = () => {
       .catch((err) => {
         setErrorMessage(`リストの取得に失敗しました。${err}`);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // タスク一覧を習得する
   useEffect(() => {
     const listId = lists[0]?.id;
     if (typeof listId !== 'undefined') {
@@ -46,6 +52,7 @@ export const Home = () => {
           setErrorMessage(`タスクの取得に失敗しました。${err}`);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lists]);
 
   const handleSelectList = (id) => {
@@ -82,14 +89,21 @@ export const Home = () => {
               </p>
             </div>
           </div>
-          <ul className="list-tab">
+          <ul className="list-tab" role="tablist">
             {lists.map((list, key) => {
               const isActive = list.id === selectListId;
               return (
                 <li
-                  key={key}
+                  role="tab"
+                  tabIndex={key}
+                  key={list.id}
                   className={`list-tab-item ${isActive ? 'active' : ''}`}
                   onClick={() => handleSelectList(list.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSelectList(list.id);
+                    }
+                  }}
                 >
                   {list.title}
                 </li>
@@ -125,15 +139,15 @@ export const Home = () => {
 // 表示するタスク
 const Tasks = (props) => {
   const { tasks, selectListId, isDoneDisplay } = props;
-  if (tasks === null) return <></>;
+  if (tasks === null) return null;
 
-  if (isDoneDisplay == 'done') {
+  if (isDoneDisplay === 'done') {
     return (
       <ul>
         {tasks
           .filter((task) => task.done === true)
-          .map((task, key) => (
-            <li key={key} className="task-item">
+          .map((task) => (
+            <li key={task.id} className="task-item">
               <Link
                 to={`/lists/${selectListId}/tasks/${task.id}`}
                 className="task-item-link"
@@ -152,15 +166,30 @@ const Tasks = (props) => {
     <ul>
       {tasks
         .filter((task) => task.done === false)
-        .map((task, key) => (
-          <li key={key} className="task-item">
+        .map((task) => (
+          <li key={task.id} className="task-item">
             <Link
               to={`/lists/${selectListId}/tasks/${task.id}`}
               className="task-item-link"
             >
               {task.title}
-              <br />
-              {task.done ? '完了' : '未完了'}
+              <div>
+                <p>{task.done ? '完了' : '未完了'}</p>
+                {task.limit ? (
+                  <div>
+                    <p className="limit">
+                      期日：
+                      {new Date(task.limit).toLocaleString('ja-JP', {
+                        timeZone: 'JST',
+                      })}
+                    </p>
+                    <p>
+                      期日まで：
+                      {diffDate(task.limit)}
+                    </p>
+                  </div>
+                ) : null}
+              </div>
             </Link>
           </li>
         ))}

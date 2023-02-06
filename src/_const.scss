@@ -1,0 +1,10 @@
+$breakPoints: (
+  'tablet': 768px,
+  'mobile': 320px,
+);
+
+@mixin mq($breakPoint) {
+  @media screen and (max-width: #{map-get($breakPoints, $breakPoint)}) {
+    @content;
+  }
+}

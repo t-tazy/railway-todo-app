@@ -1,8 +1,13 @@
 @charset "utf-8";
+@use "src/const";
 
 .signin {
-  width: 500px;
+  max-width: 500px;
+  width: 100%;
   margin: 0 auto;
+  @include const.mq(mobile){
+    width: 300px;
+  }
 
   .error-message {
     color: #ff3333;
@@ -20,6 +25,7 @@
       font-size: large;
       height: 30px;
       margin-bottom: 25px;
+      box-sizing: border-box;
     }
 
     .signin-button {
